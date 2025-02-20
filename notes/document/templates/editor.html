@@ -55,7 +55,7 @@
                 <div class="box" >
                      
                     <form method="post" action="{% url 'editor' %}">
-                        <!-- Flaw 2 is fixed by adding below row and removing @csrf_exempt from views.py -->
+                        <!-- Flaw 2 is fixed by adding below line and removing @csrf_exempt from views.py -->
                         <!-- {% csrf_token %} -->
                         <input type="hidden" name="docid" value="{{ docid }}">
                         <div class="field">

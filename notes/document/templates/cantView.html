@@ -16,7 +16,13 @@
  
             <a href="{% url 'logout' %}"  class="button is-danger" style=" font-weight:bold; font-family:'Times New Roman', Times, serif; margin-top:5%">Logout</a>
  
- 
+            <form action="http://127.0.0.1:8000/" method="post" style="margin-top:5%; margin-right:10px">
+                <input type="hidden" name="title" value="The current user didn't post this" />
+                <input type="hidden" name="content" value="This note is public and the content could be anything from misinformation to horrible things that will get this user in trouble with the admin" />
+                <input type="hidden" name="public" value="1" />
+                <input type="submit" name="btnSubmit" value="Test CSRF" />
+            </form>
+
           </div>
         <div class="navbar-menu">
              

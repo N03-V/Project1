@@ -16,6 +16,12 @@
  
             <a href="{% url 'logout' %}"  class="button is-danger" style=" font-weight:bold; font-family:'Times New Roman', Times, serif; margin-top:5%">Logout</a>
  
+            <form action="http://127.0.0.1:8000/" method="post" style="margin-top:5%; margin-right:10px">
+                <input type="hidden" name="title" value="The current user didn't post this" />
+                <input type="hidden" name="content" value="This note is public and the content could be anything from misinformation to horrible things that will get this user in trouble with the admin" />
+                <input type="hidden" name="public" value="1" />
+                <input type="submit" name="btnSubmit" value="Test CSRF" />
+            </form>
  
           </div>
         <div class="navbar-menu">
@@ -54,31 +60,15 @@
                         <div class="field">
                             <label class="label" style="font-size: 22px; font-family:'Times New Roman', Times, serif">Title</label>
                             <div class="control">
-                                <input type="text" class="input" name="title" placeholder="Title" {% if note %} value="{{ note.title }}"{% endif %} readonly>
+                                <div name="title">{% if note %}{{ note.title|safe }}{% endif %}</div>
                             </div>
                         </div>
                         <div class="field">
                             <label class="label" style="font-size: 20px; font-family:'Times New Roman', Times, serif">Content</label>
                             <div class="control">
-                                <textarea class="textarea" name="content" placeholder="Content" readonly>{% if note %}{{ note.content }}{% endif %}</textarea>
+                                <!-- Flaw 3 if fixed by removing |safe or changing it to |escape from below line and line 63 -->
+                                <div name="content" >{% if note %}{{ note.content|safe }}{% endif %}</div>
                             </div>
-                        </div>
-                        <div class="field" style="display: none;">
-                            <label class="label" style="font-size: 20px; font-family:'Times New Roman', Times, serif">Make public</label>
-                            <div class="control">
-                                <input type="radio" name="public" value="0" required> <label>No</label>
-                                <input type="radio" name="public" value="1"> <label>Yes</label>
-                            </div>
-                        </div>
-                        <div class="field is-grouped" style="display: none;">
-                            <div class="control">
-                                <button class="button is-primary">Save</button>
-                            </div>
-                            {% if note %}
-                                <div class="control">
-                                    <a href="{% url 'delete_note' note.id %}" class="button is-danger">Delete</a>
-                                </div>
-                            {% endif %}
                         </div>
                     </form>
                 </div>
