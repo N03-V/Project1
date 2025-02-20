@@ -12,7 +12,7 @@ from django.contrib.auth import logout
 @login_required(login_url='/login/')
 def editor(request):
     docid = int(request.GET.get('docid', 0))
-    notes = Note.objects.all()
+    #notes = Note.objects.all()
     notes = Note.objects.filter(owner=request.user) | Note.objects.filter(public=True)
  
     if request.method == 'POST':
@@ -28,6 +28,7 @@ def editor(request):
             note = Note.objects.get(pk=docid)
             note.title = title
             note.content = content
+            note.public = public
             note.save()
  
             return redirect('/?docid=%i' % docid)
@@ -38,6 +39,16 @@ def editor(request):
  
     if docid > 0:
         note = Note.objects.get(pk=docid)
+        '''
+        #Fix for flaw 1
+        if not note in notes:
+            context = {
+                'docid': docid,
+                'notes': notes,
+            }
+            return render(request, 'cantView.html', context)
+        '''
+
     else:
         note = ''
  
@@ -46,6 +57,9 @@ def editor(request):
         'notes': notes,
         'note': note,
     }
+
+    if docid > 0 and note.owner != request.user:
+        return render(request, 'viewNote.html', context)
  
     return render(request, 'editor.html', context)
  
