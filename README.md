@@ -6,6 +6,7 @@ Existing users:
 username:    password:
 alice        redqueen
 bob          squarepants
+admin        adminpassword
 </pre>
 
 A normal user can view and edit the notes that they have made. They can't edit public notes made by others, but can view them.
