@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
+import sqlite3
  
  
 # create editor page
@@ -16,6 +17,13 @@ def editor(request):
     docid = int(request.GET.get('docid', 0))
     #notes = Note.objects.all()
     notes = Note.objects.filter(owner=request.user) | Note.objects.filter(public=True)
+
+    if 'search' in request.session:
+        search = request.session['search']
+        if search != None:
+            notes = notes.filter(id__in=search)
+            #pass
+
  
     if request.method == 'POST':
         docid = int(request.POST.get('docid', 0))
@@ -50,9 +58,10 @@ def editor(request):
             }
             return render(request, 'cantView.html', context)
         '''
-
     else:
         note = ''
+
+    request.session['search'] = None
  
     context = {
         'docid': docid,
@@ -65,9 +74,34 @@ def editor(request):
  
     return render(request, 'editor.html', context)
  
+
+@login_required(login_url='/login/')
+def search(request):
+    request.session['search'] = None
+    if request.method == 'POST':
+        searchword = request.POST.get('search')
+        conn = sqlite3.connect('db.sqlite3')
+        cursor = conn.cursor()
+        response = cursor.execute("SELECT id FROM document_note WHERE UPPER(title) LIKE UPPER('%" + searchword + "%')").fetchall()
+        #Flaw 4 is fixed by changing the above line to 
+        #response = cursor.execute("SELECT id FROM document_note WHERE UPPER(title) LIKE UPPER(?)", ["'%" + searchword + "%'"]).fetchall()
+
+        #You can try searching for these to see the effect
+        #aaa%') UNION SELECT password FROM auth_user WHERE username='admin' or email LIKE UPPER('%aaa
+        #aaa%') UNION SELECT username FROM auth_user WHERE id = (SELECT owner_id FROM document_note WHERE title='Hello to you too!') or email LIKE UPPER('%aaa
+
+        aslist = list(response)
+        searched_notes = [id[0] for id in aslist]
+   
+
+    request.session['search'] = searched_notes
+
+    return redirect('/?docid=0')
+    #return render(request, 'editor.html', context)
+
+
+
 # create delete notes page
- 
- 
 @login_required(login_url='/login/')
 def delete_note(request, docid):
     note = Note.objects.get(pk=docid)

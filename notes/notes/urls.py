@@ -8,6 +8,7 @@ urlpatterns = [
     path('register/', register_page, name='register'),
     path('custom_logout/' ,custom_logout, name='logout'),
     path('', editor, name='editor'),
+    path('search/', search, name='search'),
     path('delete_note/<int:docid>/', delete_note, name='delete_note'),
     path('admin/', admin.site.urls),
 ]

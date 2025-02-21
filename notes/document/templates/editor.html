@@ -40,6 +40,15 @@
             <div class="column is-2">
                 <aside class="menu">
                     <p class="menu-label" style="font-size: 20px; font-weight:bold; font-family:'Times New Roman', Times, serif">Notes</p>
+
+                    <form method="post" action="{% url 'search' %}">
+                        {% csrf_token %}
+                        <div class="control">
+                            <input type="text" class="input" name="search">
+                            <input type="submit" name="searchSubmit" value="Search" />
+                        </div>      
+                    </form>
+
                     <ul class="menu-list">
                         {% for doc in notes %}
                             <li>
