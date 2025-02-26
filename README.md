@@ -1,6 +1,8 @@
 A simple notes app where users can make public and private notes.
 Used for showing security flaws.
 
+Please run this in a virtual environment, instructions are in my essay.
+
 <pre>
 Existing users:
 
