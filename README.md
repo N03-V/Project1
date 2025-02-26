@@ -3,6 +3,7 @@ Used for showing security flaws.
 
 <pre>
 Existing users:
+
 username:    password:
 alice        redqueen
 bob          squarepants
