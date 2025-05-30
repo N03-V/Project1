@@ -1,7 +1,7 @@
 asgiref==3.8.1
 distlib==0.3.9
 #This version of Django is vulnerable and should be updated to 5.1.5 or newer
-Django==5.1.3
+Django==5.1.6
 filelock==3.17.0
 platformdirs==4.3.6
 sqlparse==0.5.3

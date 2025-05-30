@@ -12,6 +12,7 @@ import sqlite3
  
 # create editor page
 @csrf_exempt
+#To fix flaw 2, delete line above
 @login_required(login_url='/login/')
 def editor(request):
     docid = int(request.GET.get('docid', 0))
